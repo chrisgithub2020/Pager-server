@@ -371,7 +371,7 @@ def voice_call_data(sid,call_data):
 
 
 app.router.add_static("/static", "static")
-app.router.add_get("/", index)
+app.router.add_get("/index.html", index)
 
 
 if __name__ == '__main__':
