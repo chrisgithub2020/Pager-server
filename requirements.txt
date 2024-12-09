@@ -1,11 +1,14 @@
 bidict==0.23.1
+bson==0.5.10
 dnspython==2.7.0
 eventlet==0.38.0
 greenlet==3.1.1
 h11==0.14.0
 mutagen==1.47.0
 pillow==11.0.0
+python-dateutil==2.9.0.post0
 python-engineio==4.10.1
 python-socketio==5.11.4
 simple-websocket==1.1.0
+six==1.17.0
 wsproto==1.2.0
