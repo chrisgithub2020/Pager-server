@@ -9,6 +9,7 @@ from datetime import datetime
 import base64
 from mutagen import File
 from threading import Thread
+from aiohttp import web
 from io import BytesIO
 from PIL import Image
 users_online = {}
@@ -16,10 +17,13 @@ eventlet.monkey_patch()
 
 DB = DataBase()
 # , async_mode='gevent', logger=True, engineio_logger=True
-sio = socketio.Server(cors_allowed_origins="*")
-app = socketio.WSGIApp(sio, static_files={
-    '/': {'content_type': 'text/html', 'filename': 'index.html'}
-})
+# sio = socketio.Server(cors_allowed_origins="*")
+sio = socketio.AsyncServer()
+app = web.Application()
+sio.attach(app)
+# app = socketio.ASGIApp(sio, static_files={
+#     '/': {'content_type': 'text/html', 'filename': 'index.html'}
+# })
 
 
 @sio.event
@@ -360,4 +364,5 @@ def voice_call_data(sid,call_data):
 
 
 if __name__ == '__main__':
-    eventlet.wsgi.server(eventlet.listen(("0.0.0.0", 9000)), app)
+    # eventlet.wsgi.server(eventlet.listen(("0.0.0.0", 9000)), app)
+    web.run_app(app)
