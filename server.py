@@ -16,7 +16,7 @@ eventlet.monkey_patch()
 
 DB = DataBase()
 # , async_mode='gevent', logger=True, engineio_logger=True
-sio = socketio.Server(cors_allowed_origins="*",allowed_upgrades=["websocket"])
+sio = socketio.Server(async_mode="eventlet",cors_allowed_origins="*",allowed_upgrades=["websocket"])
 # sio = socketio.AsyncServer()
 app = socketio.WSGIApp(sio, static_files={
     '/': {'content_type': 'text/html', 'filename': 'index.html'}
