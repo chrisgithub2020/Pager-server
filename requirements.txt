@@ -6,6 +6,7 @@ greenlet==3.1.1
 h11==0.14.0
 mutagen==1.47.0
 pillow==11.0.0
+pymongo==4.10.1
 python-dateutil==2.9.0.post0
 python-engineio==4.10.1
 python-socketio==5.11.4
