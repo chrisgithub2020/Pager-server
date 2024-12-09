@@ -9,7 +9,6 @@ from datetime import datetime
 import base64
 from mutagen import File
 from threading import Thread
-from aiohttp import web
 from io import BytesIO
 from PIL import Image
 users_online = {}
@@ -17,21 +16,12 @@ eventlet.monkey_patch()
 
 DB = DataBase()
 # , async_mode='gevent', logger=True, engineio_logger=True
-# sio = socketio.Server(cors_allowed_origins="*")
-sio = socketio.AsyncServer(allowed_upgrades=["websocket"])
-app = web.Application()
-sio.attach(app)
-# app = socketio.ASGIApp(sio, static_files={
-#     '/': {'content_type': 'text/html', 'filename': 'index.html'}
-# })
+sio = socketio.Server(cors_allowed_origins="*",allowed_upgrades=["websocket"])
+# sio = socketio.AsyncServer()
+app = socketio.WSGIApp(sio, static_files={
+    '/': {'content_type': 'text/html', 'filename': 'index.html'}
+})
 
-
-
-async def index(request):
-    """Serve the client-side application."""
-    with open('index.html') as f:
-        return web.Response(text=f.read(), content_type='text/html')
-    
 
 @sio.event
 def connect(sid, environ):
@@ -370,10 +360,5 @@ def voice_call_data(sid,call_data):
     sio.emit(event="recieve_call_data",room_name=call_data["call_room"])
 
 
-# app.router.add_static("/static", "static")
-# app.router.add_get("/index.html", index)
-
-
 if __name__ == '__main__':
-    # eventlet.wsgi.server(eventlet.listen(("0.0.0.0", 9000)), app)
-    web.run_app(app, host="0.0.0.0", port=8080)
+    eventlet.wsgi.server(eventlet.listen(("0.0.0.0", 9000)), app)
