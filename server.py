@@ -18,7 +18,7 @@ eventlet.monkey_patch()
 DB = DataBase()
 # , async_mode='gevent', logger=True, engineio_logger=True
 # sio = socketio.Server(cors_allowed_origins="*")
-sio = socketio.AsyncServer()
+sio = socketio.AsyncServer(allowed_upgrades=["websocket"])
 app = web.Application()
 sio.attach(app)
 # app = socketio.ASGIApp(sio, static_files={
@@ -370,8 +370,8 @@ def voice_call_data(sid,call_data):
     sio.emit(event="recieve_call_data",room_name=call_data["call_room"])
 
 
-app.router.add_static("/static", "static")
-app.router.add_get("/index.html", index)
+# app.router.add_static("/static", "static")
+# app.router.add_get("/index.html", index)
 
 
 if __name__ == '__main__':
