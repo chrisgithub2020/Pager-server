@@ -26,6 +26,13 @@ sio.attach(app)
 # })
 
 
+
+async def index(request):
+    """Serve the client-side application."""
+    with open('index.html') as f:
+        return web.Response(text=f.read(), content_type='text/html')
+    
+
 @sio.event
 def connect(sid, environ):
     print('connect ', sid)
@@ -361,6 +368,10 @@ def start_audio_call(sid, callee):
 @sio.event
 def voice_call_data(sid,call_data):
     sio.emit(event="recieve_call_data",room_name=call_data["call_room"])
+
+
+app.router.add_static("/static", "static")
+app.router.add_get("/", index)
 
 
 if __name__ == '__main__':
