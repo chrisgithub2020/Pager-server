@@ -2,8 +2,6 @@ import eventlet
 import socketio
 import os
 import json
-from gevent import pywsgi
-from geventwebsocket.handler import WebSocketHandler
 import uuid
 from utils import Utils
 from database import DataBase
@@ -17,8 +15,8 @@ users_online = {}
 eventlet.monkey_patch()
 
 DB = DataBase()
-
-sio = socketio.Server(cors_allowed_origins="*", async_mode='gevent', logger=True, engineio_logger=True)
+# , async_mode='gevent', logger=True, engineio_logger=True
+sio = socketio.Server(cors_allowed_origins="*")
 app = socketio.WSGIApp(sio, static_files={
     '/': {'content_type': 'text/html', 'filename': 'index.html'}
 })
@@ -362,7 +360,4 @@ def voice_call_data(sid,call_data):
 
 
 if __name__ == '__main__':
-    # eventlet.wsgi.server(eventlet.listen(("0.0.0.0", 9000)), app)
-    print("started")
-    server = pywsgi.WSGIServer(('192.168.100.93', 5555), app, handler_class=WebSocketHandler)
-    server.serve_forever()
+    eventlet.wsgi.server(eventlet.listen(("0.0.0.0", 9000)), app)
